@@ -1,15 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaCircleCheck } from "react-icons/fa6";
 import DesktopImg from "/illustration-sign-up-desktop.svg";
 import MobileImg from "/illustration-sign-up-mobile.svg";
+import { useForm } from "react-hook-form";
 
 const App = () => {
+  const [data, setData] = useState("");
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  console.log("data-", data);
+
+  console.log("errors-", errors);
+
   return (
     <>
       <main className="md:bg-charcoalGray md:w-full h-screen md:flex justify-center items-center">
         <div className="md:max-w-[700px] md:h-[500px] w-full bg-white rounded-3xl md:p-4">
-          <div className="flex md:flex-row flex-col-reverse justify-between gap-10 items-center">
-            <div className="flex flex-col  gap-4 justify-center">
+          <div className="flex md:flex-row flex-col-reverse justify-between gap-10 md:items-center">
+            <div className="flex flex-col p-5 gap-4 justify-center">
               <h1 className="text-4xl text-darkSlateGray font-bold ">
                 Stay Updated!
               </h1>
@@ -39,25 +52,44 @@ const App = () => {
                 </div>
               </div>
 
-              <form action="" className="mt-2 flex flex-col">
-                <label htmlFor="" className="text-xs font-bold">
-                  Email address
+              {/* form */}
+              <form
+                onSubmit={handleSubmit((data) => setData(JSON.stringify(data)))}
+                className="mt-2 flex flex-col"
+              >
+                <label
+                  htmlFor=""
+                  className="text-xs font-bold flex justify-between"
+                >
+                  <p>Email address</p>
+                  {errors.exampleRequired && (
+                    <p className="text-red-500">Invalid Email</p>
+                  )}
                 </label>
 
                 <input
-                  type="email"
-                  required
-                  placeholder="qwerwq@gmail.com"
+                  {...register(
+                    "email",
+                    { required: "Valid email required" },
+                    {
+                      pattern: /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/,
+                      message: "invalid email address",
+                    }
+                  )}
+                  placeholder="qwerty@gmail.com"
                   className=" border-2 focus:ring-grey text-sm py-2 disabled:border-grey  border-grey rounded-md mt-2 px-4 mb-4"
                 />
 
-                <button className="py-3 bg-darkSlateGray hover:bg-gradient-to-r from-red-500  to-orange-500 text-sm font-bold text-white rounded-md transition-all">
+                <button
+                  type="submit"
+                  className="py-3 bg-darkSlateGray hover:bg-gradient-to-r from-red-500  to-orange-500 text-sm font-bold text-white rounded-md transition-all"
+                >
                   Subscribe to monthly newsletters
                 </button>
               </form>
             </div>
 
-            <div>
+            <div className="flex justify-center">
               <img
                 src={DesktopImg}
                 alt=""
